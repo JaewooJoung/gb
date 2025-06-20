@@ -679,12 +679,26 @@
         async function loadPlaces() {
             try {
                 const response = await fetch('places.json');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
                 places = await response.json();
                 initializePlaces();
             } catch (error) {
                 console.error('Error loading places:', error);
-                // Fallback to embedded data if JSON fails to load
-                       function calculateDistance(lat1, lon1, lat2, lon2) {
+                // Show error message to user
+                const grid = document.getElementById('places-grid');
+                grid.innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; padding: 40px;">
+                        <h3 style="color: #ff6b6b; margin-bottom: 10px;">Error Loading Places</h3>
+                        <p style="color: #888;">Unable to load places data. Please ensure places.json is in the same directory as this HTML file.</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Calculate distance between two points using Haversine formula
+        function calculateDistance(lat1, lon1, lat2, lon2) {
             const R = 6371; // Radius of the Earth in kilometers
             const dLat = (lat2 - lat1) * Math.PI / 180;
             const dLon = (lon2 - lon1) * Math.PI / 180;
