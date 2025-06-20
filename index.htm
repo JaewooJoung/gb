@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Göteborg Travel Guide</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        .hero {
+            height: 100vh;
+            /* Layered background with Göteborg theme */
+            background: 
+                linear-gradient(135deg, rgba(30, 64, 175, 0.85) 0%, rgba(45, 212, 191, 0.85) 100%),
+                url('https://jaewoojoung.github.io/tb/png/goteborg.png') center/cover no-repeat;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Animated dot grid */
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: drift 20s linear infinite;
+            z-index: 1;
+        }
+        
+        @keyframes drift {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+        
+        .hero-content {
+            text-align: center;
+            z-index: 10;
+            animation: fadeInUp 1s ease-out;
+        }
+        
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero h1 {
+            font-size: 5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, #ffffff, #e0e0e0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -2px;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 3rem;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 50px;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .cta-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .section {
+            padding: 100px 0;
+            position: relative;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .section-title {
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 4rem;
+            background: linear-gradient(135deg, #1e40af, #2dd4bf);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .map-section {
+            background: #111111;
+        }
+
+        /* Weather Styles */
+        .weather-container {
+            background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 60px rgba(30, 64, 175, 0.2);
+            margin-bottom: 40px;
+        }
+
+        .weather-loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            color: #888;
+        }
+
+        .weather-content {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .weather-main {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .weather-icon-container {
+            position: relative;
+        }
+
+        .weather-icon {
+            width: 120px;
+            height: 120px;
+            filter: drop-shadow(0 5px 15px rgba(30, 64, 175, 0.3));
+        }
+
+        .weather-temp {
+            font-size: 4rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #1e40af, #2dd4bf);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1;
+        }
+
+        .weather-desc {
+            font-size: 1.2rem;
+            color: #b0b0b0;
+            margin-top: 5px;
+        }
+
+        .weather-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+        }
+
+        .weather-detail {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .weather-detail:hover {
+            background: rgba(30, 64, 175, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .weather-detail-label {
+            font-size: 0.85rem;
+            color: #888;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .weather-detail-value {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .weather-location {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            color: #b0b0b0;
+        }
+
+        .weather-location::before {
+            content: '📍';
+            font-size: 1.2rem;
+        }
+
+        .weather-update {
+            font-size: 0.85rem;
+            color: #666;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        #map {
+            width: 100%;
+            height: 600px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(30, 64, 175, 0.2);
+            position: relative;
+        }
+
+        .location-status {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 15px 25px;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .location-status.active {
+            background: rgba(76, 175, 80, 0.2);
+            border-color: #4CAF50;
+        }
+
+        .location-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #ff5252;
+            animation: pulse 2s infinite;
+        }
+
+        .location-status.active .location-dot {
+            background: #4CAF50;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(255, 82, 82, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(255, 82, 82, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(255, 82, 82, 0);
+            }
+        }
+
+        .places-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 80px;
+        }
+
+        .place-card {
+            background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .place-card-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-size: cover;
+            background-position: center;
+            opacity: 0.3;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            z-index: 0;
+        }
+
+        .place-card:hover .place-card-bg {
+            opacity: 0.4;
+            transform: scale(1.05);
+        }
+
+        .place-card-content {
+            position: relative;
+            z-index: 1;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .place-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at var(--mouse-x) var(--mouse-y), rgba(30, 64, 175, 0.15), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .place-card:hover::before {
+            opacity: 1;
+        }
+
+        .place-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(30, 64, 175, 0.3);
+        }
+
+        .place-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: #ffffff;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .place-card h3 a {
+            color: inherit;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .place-card h3 a:hover {
+            color: #60a5fa;
+        }
+
+        .place-card .category {
+            display: inline-block;
+            padding: 5px 15px;
+            background: rgba(30, 64, 175, 0.3);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            color: #60a5fa;
+            border: 1px solid rgba(30, 64, 175, 0.4);
+            text-transform: capitalize;
+        }
+
+        .place-card p {
+            color: #d0d0d0;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            flex: 1;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .place-card .distance {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin: 15px 0;
+            color: #4CAF50;
+            font-weight: 600;
+        }
+
+        .place-card .distance::before {
+            content: '📍';
+            font-size: 1.2rem;
+        }
+
+        .place-card .details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .place-card .time {
+            color: #2dd4bf;
+            font-weight: 600;
+        }
+
+        .place-card .visit-btn {
+            padding: 8px 20px;
+            background: linear-gradient(135deg, #1e40af, #2dd4bf);
+            border: none;
+            border-radius: 25px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .place-card .visit-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(30, 64, 175, 0.4);
+        }
+
+        .filter-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 50px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 10px 25px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 30px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .filter-btn:hover {
+            background: rgba(30, 64, 175, 0.3);
+            border-color: #1e40af;
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(135deg, #1e40af, #2dd4bf);
+            border-color: transparent;
+        }
+
+        .sort-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+            align-items: center;
+        }
+
+        .sort-label {
+            color: #888;
+            font-weight: 600;
+        }
+
+        .sort-btn {
+            padding: 8px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .sort-btn.active {
+            background: rgba(76, 175, 80, 0.2);
+            border-color: #4CAF50;
+            color: #4CAF50;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 50px 0;
+            background: #0a0a0a;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer p {
+            color: #666;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #1e40af;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+            
+            .hero p {
+                font-size: 1.2rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            #map {
+                height: 400px;
+            }
+
+            .location-status {
+                top: 10px;
+                right: 10px;
+                padding: 10px 15px;
+                font-size: 0.9rem;
+            }
+
+            .weather-content {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .weather-main {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Göteborg</h1>
+            <p>Discover Sweden's West Coast Gem 🇸🇪</p>
+            <a href="#map-section" class="cta-button">Explore Places</a>
+        </div>
+    </section>
+
+    <section class="section map-section" id="map-section">
+        <div class="container">
+            <h2 class="section-title">Göteborg Weather & Map</h2>
+            
+            <!-- Weather Section -->
+            <div class="weather-container" id="weather-container">
+                <div class="weather-loading">
+                    <div class="loading"></div>
+                    <span>Loading weather...</span>
+                </div>
+            </div>
+            
+            <div style="position: relative;">
+                <div id="map"></div>
+                <div class="location-status" id="location-status">
+                    <div class="location-dot"></div>
+                    <span id="location-text">Getting location...</span>
+                </div>
+            </div>
+            
+            <div class="filter-container">
+                <button class="filter-btn active" onclick="filterPlaces('all')">All Places</button>
+                <button class="filter-btn" onclick="filterPlaces('museum')">Museums</button>
+                <button class="filter-btn" onclick="filterPlaces('park')">Parks</button>
+                <button class="filter-btn" onclick="filterPlaces('shopping')">Shopping</button>
+                <button class="filter-btn" onclick="filterPlaces('culture')">Culture</button>
+                <button class="filter-btn" onclick="filterPlaces('entertainment')">Entertainment</button>
+            </div>
+
+            <div class="sort-container">
+                <span class="sort-label">Sort by:</span>
+                <button class="sort-btn" id="sort-distance" onclick="sortByDistance()">Distance</button>
+                <button class="sort-btn" id="sort-name" onclick="sortByName()">Name</button>
+            </div>
+
+            <div class="places-grid" id="places-grid">
+                <!-- Place cards will be dynamically inserted here -->
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p>🌊 2025 Göteborg Travel Guide 🌊<br>Explore the Heart of West Sweden<br>Created with ❤️</p>
+        </div>
+    </footer>
+
+    <script>
+        // Global variables
+        let places = [];
+        let userLocation = null;
+        let userMarker = null;
+        let currentFilter = 'all';
+        let currentSort = null;
+        let markers = [];
+
+        // Initialize map centered on Göteborg
+        const map = L.map('map').setView([57.7089, 11.9746], 12);
+        
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            attribution: '© OpenStreetMap contributors © CARTO',
+            subdomains: 'abcd',
+            maxZoom: 19
+        }).addTo(map);
+
+        // Weather function
+        function getWeather() {
+            const weatherContainer = document.getElementById('weather-container');
+            
+            fetch('https://api.weatherapi.com/v1/current.json?key=ad8caecea06c43d1912181938230407&q=Gothenburg')
+                .then(response => response.json())
+                .then(data => {
+                    const weather = data.current;
+                    const location = data.location;
+                    
+                    weatherContainer.innerHTML = `
+                        <div class="weather-location">${location.name}, ${location.country}</div>
+                        <div class="weather-content">
+                            <div class="weather-main">
+                                <div class="weather-icon-container">
+                                    <img src="https:${weather.condition.icon}" alt="${weather.condition.text}" class="weather-icon">
+                                </div>
+                                <div>
+                                    <div class="weather-temp">${Math.round(weather.temp_c)}°C</div>
+                                    <div class="weather-desc">${weather.condition.text}</div>
+                                </div>
+                            </div>
+                            <div class="weather-details">
+                                <div class="weather-detail">
+                                    <div class="weather-detail-label">Feels Like</div>
+                                    <div class="weather-detail-value">${Math.round(weather.feelslike_c)}°C</div>
+                                </div>
+                                <div class="weather-detail">
+                                    <div class="weather-detail-label">Humidity</div>
+                                    <div class="weather-detail-value">${weather.humidity}%</div>
+                                </div>
+                                <div class="weather-detail">
+                                    <div class="weather-detail-label">Wind</div>
+                                    <div class="weather-detail-value">${weather.wind_kph} km/h</div>
+                                </div>
+                                <div class="weather-detail">
+                                    <div class="weather-detail-label">UV Index</div>
+                                    <div class="weather-detail-value">${weather.uv}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="weather-update">Last updated: ${weather.last_updated}</div>
+                    `;
+                })
+                .catch(error => {
+                    console.error('Error fetching weather:', error);
+                    weatherContainer.innerHTML = '<div style="text-align: center; color: #888;">Weather data unavailable</div>';
+                });
+        }
+
+        // Load places from JSON
+        async function loadPlaces() {
+            try {
+                const response = await fetch('places.json');
+                places = await response.json();
+                initializePlaces();
+            } catch (error) {
+                console.error('Error loading places:', error);
+                // Fallback to embedded data if JSON fails to load
+                places = [
+                    {
+                        "id": 1,
+                        "name": "Liseberg",
+                        "category": "entertainment",
+                        "coordinates": {
+                            "latitude": 57.6949,
+                            "longitude": 11.9926
+                        },
+                        "description": "Scandinavia's largest amusement park with thrilling rides, beautiful gardens, and seasonal events throughout the year.",
+                        "hours": "Varies by season",
+                        "admission": "From 95 SEK",
+                        "website": "https://www.liseberg.se",
+                        "color": "#ff6b6b",
+                        "image": "https://jaewoojoung.github.io/tb/png/1.png"
+                    },
+                    {
+                        "id": 2,
+                        "name": "Universeum",
+                        "category": "museum",
+                        "coordinates": {
+                            "latitude": 57.6947,
+                            "longitude": 11.9892
+                        },
+                        "description": "Nordic region's largest science centre with rainforest, aquarium, and interactive exhibitions for all ages.",
+                        "hours": "10:00 AM - 6:00 PM",
+                        "admission": "Adults 285 SEK",
+                        "website": "https://www.universeum.se",
+                        "color": "#4ecdc4",
+                        "image": "https://jaewoojoung.github.io/tb/png/2.png"
+                    },
+                    {
+                        "id": 3,
+                        "name": "Haga",
+                        "category": "shopping",
+                        "coordinates": {
+                            "latitude": 57.6980,
+                            "longitude": 11.9539
+                        },
+                        "description": "Charming historic district with cobblestone streets, wooden houses, cozy cafés, and unique boutiques.",
+                        "hours": "Shops: 10:00 AM - 6:00 PM",
+                        "admission": "Free",
+                        "website": null,
+                        "color": "#ffe66d",
+                        "image": "https://jaewoojoung.github.io/tb/png/3.png"
+                    },
+                    {
+                        "id": 4,
+                        "name": "Gothenburg Museum of Art",
+                        "category": "museum",
+                        "coordinates": {
+                            "latitude": 57.6984,
+                            "longitude": 11.9819
+                        },
+                        "description": "Leading Nordic art museum featuring works from the 15th century to contemporary pieces.",
+                        "hours": "11:00 AM - 5:00 PM (Thu until 8:00 PM)",
+                        "admission": "120 SEK",
+                        "website": "https://www.goteborgskonstmuseum.se",
+                        "color": "#4ecdc4",
+                        "image": "https://jaewoojoung.github.io/tb/png/4.png"
+                    },
+                    {
+                        "id": 5,
+                        "name": "Southern Gothenburg Archipelago",
+                        "category": "park",
+                        "coordinates": {
+                            "latitude": 57.6418,
+                            "longitude": 11.7671
+                        },
+                        "description": "Car-free islands accessible by ferry, offering pristine nature, swimming spots, and traditional fishing villages.",
+                        "hours": "Ferry schedules vary",
+                        "admission": "Ferry ticket required",
+                        "website": "https://www.vasttrafik.se",
+                        "color": "#95e1d3",
+                        "image": "https://jaewoojoung.github.io/tb/png/5.png"
+                    },
+                    {
+                        "id": 6,
+                        "name": "Slottsskogen",
+                        "category": "park",
+                        "coordinates": {
+                            "latitude": 57.6863,
+                            "longitude": 11.9478
+                        },
+                        "description": "Large park with zoo, playgrounds, and walking trails. Home to Nordic animals including seals, elks, and penguins.",
+                        "hours": "Open 24/7",
+                        "admission": "Free",
+                        "website": "https://goteborg.se/slottsskogen",
+                        "color": "#95e1d3",
+                        "image": "https://jaewoojoung.github.io/tb/png/6.png"
+                    },
+                    {
+                        "id": 7,
+                        "name": "Feskekôrka (Fish Church)",
+                        "category": "shopping",
+                        "coordinates": {
+                            "latitude": 57.7038,
+                            "longitude": 11.9580
+                        },
+                        "description": "Iconic fish market in a building resembling a Gothic church, offering fresh seafood and a restaurant.",
+                        "hours": "10:00 AM - 6:00 PM (Closed Sun-Mon)",
+                        "admission": "Free",
+                        "website": "https://www.feskekorka.se",
+                        "color": "#ffe66d",
+                        "image": "https://jaewoojoung.github.io/tb/png/7.png"
+                    },
+                    {
+                        "id": 8,
+                        "name": "Gothenburg Botanical Garden",
+                        "category": "park",
+                        "coordinates": {
+                            "latitude": 57.6828,
+                            "longitude": 11.9506
+                        },
+                        "description": "One of Europe's largest botanical gardens with 16,000 species including rare orchids and a Japanese garden.",
+                        "hours": "9:00 AM - Sunset",
+                        "admission": "Free (Greenhouse 20 SEK)",
+                        "website": "https://www.botaniska.se",
+                        "color": "#95e1d3",
+                        "image": "https://jaewoojoung.github.io/tb/png/8.png"
+                    },
+                    {
+                        "id": 9,
+                        "name": "Gothenburg Opera House",
+                        "category": "culture",
+                        "coordinates": {
+                            "latitude": 57.7066,
+                            "longitude": 11.9640
+                        },
+                        "description": "Stunning waterfront opera house offering world-class performances of opera, musicals, ballet, and concerts.",
+                        "hours": "Box office: 10:00 AM - 6:00 PM",
+                        "admission": "Varies by performance",
+                        "website": "https://www.opera.se",
+                        "color": "#4ecdc4",
+                        "image": "https://jaewoojoung.github.io/tb/png/9.png"
+                    },
+                    {
+                        "id": 10,
+                        "name": "Avenyn (Kungsportsavenyen)",
+                        "category": "shopping",
+                        "coordinates": {
+                            "latitude": 57.6999,
+                            "longitude": 11.9733
+                        },
+                        "description": "The main boulevard of Gothenburg lined with shops, restaurants, cafés, and cultural institutions.",
+                        "hours": "Open 24/7",
+                        "admission": "Free",
+                        "website": null,
+                        "color": "#ffe66d",
+                        "image": "https://jaewoojoung.github.io/tb/png/10.png"
+                    },
+                    {
+                        "id": 11,
+                        "name": "Maritiman",
+                        "category": "museum",
+                        "coordinates": {
+                            "latitude": 57.7118,
+                            "longitude": 11.9627
+                        },
+                        "description": "The world's largest floating ship museum with 15 historic vessels including a submarine and destroyer.",
+                        "hours": "10:00 AM - 5:00 PM",
+                        "admission": "Adults 175 SEK",
+                        "website": "https://www.maritiman.se",
+                        "color": "#4ecdc4",
+                        "image": "https://jaewoojoung.github.io/tb/png/11.png"
+                    },
+                    {
+                        "id": 12,
+                        "name": "Volvo Museum",
+                        "category": "museum",
+                        "coordinates": {
+                            "latitude": 57.6971,
+                            "longitude": 11.8234
+                        },
+                        "description": "Showcasing Volvo's history from 1927 to present with cars, trucks, buses, and marine engines.",
+                        "hours": "10:00 AM - 5:00 PM (Closed Mon)",
+                        "admission": "100 SEK",
+                        "website": "https://www.volvomuseum.se",
+                        "color": "#4ecdc4",
+                        "image": "https://jaewoojoung.github.io/tb/png/12.png"
+                    },
+                    {
+                        "id": 13,
+                        "name": "Skansen Kronan",
+                        "category": "culture",
+                        "coordinates": {
+                            "latitude": 57.6951,
+                            "longitude": 11.9536
+                        },
+                        "description": "17th-century fortress offering panoramic views of Gothenburg from its hilltop location in Haga.",
+                        "hours": "11:00 AM - 4:00 PM",
+                        "admission": "40 SEK",
+                        "website": "https://www.skansenkronan.se",
+                        "color": "#4ecdc4",
+                        "image": "https://jaewoojoung.github.io/tb/png/13.png"
+                    },
+                    {
+                        "id": 14,
+                        "name": "Nordstan",
+                        "category": "shopping",
+                        "coordinates": {
+                            "latitude": 57.7079,
+                            "longitude": 11.9686
+                        },
+                        "description": "One of Scandinavia's largest shopping centers with over 180 shops, restaurants, and services.",
+                        "hours": "10:00 AM - 8:00 PM",
+                        "admission": "Free",
+                        "website": "https://www.nordstan.se",
+                        "color": "#ffe66d",
+                        "image": "https://jaewoojoung.github.io/tb/png/14.png"
+                    },
+                    {
+                        "id": 15,
+                        "name": "Museum of World Culture",
+                        "category": "museum",
+                        "coordinates": {
+                            "latitude": 57.6978,
+                            "longitude": 11.9812
+                        },
+                        "description": "Contemporary museum exploring global issues through thought-provoking exhibitions and cultural programs.",
+                        "hours": "12:00 PM - 5:00 PM (Wed until 8:00 PM)",
+                        "admission": "Free",
+                        "website": "https://www.varldskulturmuseet.se",
+                        "color": "#4ecdc4",
+                        "image": "https://jaewoojoung.github.io/tb/png/15.png"
+                    },
+                    {
+                        "id": 16,
+                        "name": "Trädgårdsföreningen",
+                        "category": "park",
+                        "coordinates": {
+                            "latitude": 57.7048,
+                            "longitude": 11.9733
+                        },
+                        "description": "Historic 19th-century park with rose garden, palm house, and beautiful landscaped gardens in the city center.",
+                        "hours": "7:00 AM - 8:00 PM",
+                        "admission": "Free (Palm House 20 SEK)",
+                        "website": "https://www.tradgardsforeningen.se",
+                        "color": "#95e1d3",
+                        "image": "https://jaewoojoung.github.io/tb/png/16.png"
+                    },
+                    {
+                        "id": 17,
+                        "name": "Gothenburg City Museum",
+                        "category": "museum",
+                        "coordinates": {
+                            "latitude": 57.7041,
+                            "longitude": 11.9644
+                        },
+                        "description": "Explore Gothenburg's history from Viking times to present in the historic East India Company building.",
+                        "hours": "10:00 AM - 5:00 PM (Wed until 8:00 PM)",
+                        "admission": "60 SEK",
+                        "website": "https://www.stadsmuseum.goteborg.se",
+                        "color": "#4ecdc4",
+                        "image": "https://jaewoojoung.github.io/tb/png/17.png"
+                    },
+                    {
+                        "id": 18,
+                        "name": "Röhsska Museum",
+                        "category": "museum",
+                        "coordinates": {
+                            "latitude": 57.6989,
+                            "longitude": 11.9647
+                        },
+                        "description": "Sweden's only museum of design and applied arts featuring fashion, furniture, and decorative arts.",
+                        "hours": "12:00 PM - 5:00 PM (Thu until 8:00 PM)",
+                        "admission": "60 SEK",
+                        "website": "https://www.rohsska.se",
+                        "color": "#4ecdc4",
+                        "image": "https://jaewoojoung.github.io/tb/png/18.png"
+                    },
+                    {
+                        "id": 19,
+                        "name": "Delsjön Nature Reserve",
+                        "category": "park",
+                        "coordinates": {
+                            "latitude": 57.6871,
+                            "longitude": 12.0439
+                        },
+                        "description": "Popular recreation area with two lakes offering swimming, hiking trails, and outdoor activities year-round.",
+                        "hours": "Open 24/7",
+                        "admission": "Free",
+                        "website": null,
+                        "color": "#95e1d3",
+                        "image": "https://jaewoojoung.github.io/tb/png/19.png"
+                    },
+                    {
+                        "id": 20,
+                        "name": "Aeroseum",
+                        "category": "museum",
+                        "coordinates": {
+                            "latitude": 57.7761,
+                            "longitude": 11.7768
+                        },
+                        "description": "Underground aviation museum in a former military hangar featuring aircraft and flight simulators.",
+                        "hours": "11:00 AM - 6:00 PM (Summer only)",
+                        "admission": "Adults 140 SEK",
+                        "website": "https://www.aeroseum.se",
+                        "color": "#4ecdc4",
+                        "image": "https://jaewoojoung.github.io/tb/png/20.png"
+                    },
+                    {
+                        "id": 21,
+                        "name": "Nya Älvsborg Fortress",
+                        "category": "culture",
+                        "coordinates": {
+                            "latitude": 57.6624,
+                            "longitude": 11.8423
+                        },
+                        "description": "17th-century sea fortress on an island at the harbor entrance, accessible by boat tour with guided visits.",
+                        "hours": "Tours: May-September",
+                        "admission": "Adults 195 SEK (includes boat)",
+                        "website": "https://www.stromma.se",
+                        "color": "#4ecdc4",
+                        "image": "https://jaewoojoung.github.io/tb/png/21.png"
+                    }
