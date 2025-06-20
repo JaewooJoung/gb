@@ -684,319 +684,263 @@
             } catch (error) {
                 console.error('Error loading places:', error);
                 // Fallback to embedded data if JSON fails to load
-                places = [
-                    {
-                        "id": 1,
-                        "name": "Liseberg",
-                        "category": "entertainment",
-                        "coordinates": {
-                            "latitude": 57.6949,
-                            "longitude": 11.9926
-                        },
-                        "description": "Scandinavia's largest amusement park with thrilling rides, beautiful gardens, and seasonal events throughout the year.",
-                        "hours": "Varies by season",
-                        "admission": "From 95 SEK",
-                        "website": "https://www.liseberg.se",
-                        "color": "#ff6b6b",
-                        "image": "https://jaewoojoung.github.io/tb/png/1.png"
+                       function calculateDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371; // Radius of the Earth in kilometers
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
+            const a = 
+                Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                Math.sin(dLon/2) * Math.sin(dLon/2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            const distance = R * c;
+            return distance.toFixed(1);
+        }
+
+        // Get user's current location
+        function getUserLocation() {
+            const statusEl = document.getElementById('location-status');
+            const textEl = document.getElementById('location-text');
+
+            if (navigator.geolocation) {
+                textEl.innerHTML = '<div class="loading"></div> Getting location...';
+                
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        userLocation = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude
+                        };
+                        
+                        statusEl.classList.add('active');
+                        textEl.textContent = 'Location found';
+                        
+                        // Add user marker to map
+                        if (userMarker) {
+                            map.removeLayer(userMarker);
+                        }
+                        
+                        const userIcon = L.divIcon({
+                            className: 'user-marker',
+                            html: `<div style="background: #4CAF50; width: 20px; height: 20px; border-radius: 50%; border: 3px solid white; box-shadow: 0 3px 10px rgba(0,0,0,0.5); position: relative;">
+                                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 40px; height: 40px; border: 2px solid #4CAF50; border-radius: 50%; animation: radar 2s infinite;"></div>
+                                  </div>`,
+                            iconSize: [20, 20],
+                            iconAnchor: [10, 10]
+                        });
+                        
+                        userMarker = L.marker([userLocation.lat, userLocation.lng], {
+                            icon: userIcon
+                        }).addTo(map);
+                        
+                        userMarker.bindPopup('Your current location');
+                        
+                        // Update distances
+                        updateDistances();
+                        
+                        // Re-render place cards to show distances
+                        renderPlaceCards();
                     },
-                    {
-                        "id": 2,
-                        "name": "Universeum",
-                        "category": "museum",
-                        "coordinates": {
-                            "latitude": 57.6947,
-                            "longitude": 11.9892
-                        },
-                        "description": "Nordic region's largest science centre with rainforest, aquarium, and interactive exhibitions for all ages.",
-                        "hours": "10:00 AM - 6:00 PM",
-                        "admission": "Adults 285 SEK",
-                        "website": "https://www.universeum.se",
-                        "color": "#4ecdc4",
-                        "image": "https://jaewoojoung.github.io/tb/png/2.png"
-                    },
-                    {
-                        "id": 3,
-                        "name": "Haga",
-                        "category": "shopping",
-                        "coordinates": {
-                            "latitude": 57.6980,
-                            "longitude": 11.9539
-                        },
-                        "description": "Charming historic district with cobblestone streets, wooden houses, cozy cafés, and unique boutiques.",
-                        "hours": "Shops: 10:00 AM - 6:00 PM",
-                        "admission": "Free",
-                        "website": null,
-                        "color": "#ffe66d",
-                        "image": "https://jaewoojoung.github.io/tb/png/3.png"
-                    },
-                    {
-                        "id": 4,
-                        "name": "Gothenburg Museum of Art",
-                        "category": "museum",
-                        "coordinates": {
-                            "latitude": 57.6984,
-                            "longitude": 11.9819
-                        },
-                        "description": "Leading Nordic art museum featuring works from the 15th century to contemporary pieces.",
-                        "hours": "11:00 AM - 5:00 PM (Thu until 8:00 PM)",
-                        "admission": "120 SEK",
-                        "website": "https://www.goteborgskonstmuseum.se",
-                        "color": "#4ecdc4",
-                        "image": "https://jaewoojoung.github.io/tb/png/4.png"
-                    },
-                    {
-                        "id": 5,
-                        "name": "Southern Gothenburg Archipelago",
-                        "category": "park",
-                        "coordinates": {
-                            "latitude": 57.6418,
-                            "longitude": 11.7671
-                        },
-                        "description": "Car-free islands accessible by ferry, offering pristine nature, swimming spots, and traditional fishing villages.",
-                        "hours": "Ferry schedules vary",
-                        "admission": "Ferry ticket required",
-                        "website": "https://www.vasttrafik.se",
-                        "color": "#95e1d3",
-                        "image": "https://jaewoojoung.github.io/tb/png/5.png"
-                    },
-                    {
-                        "id": 6,
-                        "name": "Slottsskogen",
-                        "category": "park",
-                        "coordinates": {
-                            "latitude": 57.6863,
-                            "longitude": 11.9478
-                        },
-                        "description": "Large park with zoo, playgrounds, and walking trails. Home to Nordic animals including seals, elks, and penguins.",
-                        "hours": "Open 24/7",
-                        "admission": "Free",
-                        "website": "https://goteborg.se/slottsskogen",
-                        "color": "#95e1d3",
-                        "image": "https://jaewoojoung.github.io/tb/png/6.png"
-                    },
-                    {
-                        "id": 7,
-                        "name": "Feskekôrka (Fish Church)",
-                        "category": "shopping",
-                        "coordinates": {
-                            "latitude": 57.7038,
-                            "longitude": 11.9580
-                        },
-                        "description": "Iconic fish market in a building resembling a Gothic church, offering fresh seafood and a restaurant.",
-                        "hours": "10:00 AM - 6:00 PM (Closed Sun-Mon)",
-                        "admission": "Free",
-                        "website": "https://www.feskekorka.se",
-                        "color": "#ffe66d",
-                        "image": "https://jaewoojoung.github.io/tb/png/7.png"
-                    },
-                    {
-                        "id": 8,
-                        "name": "Gothenburg Botanical Garden",
-                        "category": "park",
-                        "coordinates": {
-                            "latitude": 57.6828,
-                            "longitude": 11.9506
-                        },
-                        "description": "One of Europe's largest botanical gardens with 16,000 species including rare orchids and a Japanese garden.",
-                        "hours": "9:00 AM - Sunset",
-                        "admission": "Free (Greenhouse 20 SEK)",
-                        "website": "https://www.botaniska.se",
-                        "color": "#95e1d3",
-                        "image": "https://jaewoojoung.github.io/tb/png/8.png"
-                    },
-                    {
-                        "id": 9,
-                        "name": "Gothenburg Opera House",
-                        "category": "culture",
-                        "coordinates": {
-                            "latitude": 57.7066,
-                            "longitude": 11.9640
-                        },
-                        "description": "Stunning waterfront opera house offering world-class performances of opera, musicals, ballet, and concerts.",
-                        "hours": "Box office: 10:00 AM - 6:00 PM",
-                        "admission": "Varies by performance",
-                        "website": "https://www.opera.se",
-                        "color": "#4ecdc4",
-                        "image": "https://jaewoojoung.github.io/tb/png/9.png"
-                    },
-                    {
-                        "id": 10,
-                        "name": "Avenyn (Kungsportsavenyen)",
-                        "category": "shopping",
-                        "coordinates": {
-                            "latitude": 57.6999,
-                            "longitude": 11.9733
-                        },
-                        "description": "The main boulevard of Gothenburg lined with shops, restaurants, cafés, and cultural institutions.",
-                        "hours": "Open 24/7",
-                        "admission": "Free",
-                        "website": null,
-                        "color": "#ffe66d",
-                        "image": "https://jaewoojoung.github.io/tb/png/10.png"
-                    },
-                    {
-                        "id": 11,
-                        "name": "Maritiman",
-                        "category": "museum",
-                        "coordinates": {
-                            "latitude": 57.7118,
-                            "longitude": 11.9627
-                        },
-                        "description": "The world's largest floating ship museum with 15 historic vessels including a submarine and destroyer.",
-                        "hours": "10:00 AM - 5:00 PM",
-                        "admission": "Adults 175 SEK",
-                        "website": "https://www.maritiman.se",
-                        "color": "#4ecdc4",
-                        "image": "https://jaewoojoung.github.io/tb/png/11.png"
-                    },
-                    {
-                        "id": 12,
-                        "name": "Volvo Museum",
-                        "category": "museum",
-                        "coordinates": {
-                            "latitude": 57.6971,
-                            "longitude": 11.8234
-                        },
-                        "description": "Showcasing Volvo's history from 1927 to present with cars, trucks, buses, and marine engines.",
-                        "hours": "10:00 AM - 5:00 PM (Closed Mon)",
-                        "admission": "100 SEK",
-                        "website": "https://www.volvomuseum.se",
-                        "color": "#4ecdc4",
-                        "image": "https://jaewoojoung.github.io/tb/png/12.png"
-                    },
-                    {
-                        "id": 13,
-                        "name": "Skansen Kronan",
-                        "category": "culture",
-                        "coordinates": {
-                            "latitude": 57.6951,
-                            "longitude": 11.9536
-                        },
-                        "description": "17th-century fortress offering panoramic views of Gothenburg from its hilltop location in Haga.",
-                        "hours": "11:00 AM - 4:00 PM",
-                        "admission": "40 SEK",
-                        "website": "https://www.skansenkronan.se",
-                        "color": "#4ecdc4",
-                        "image": "https://jaewoojoung.github.io/tb/png/13.png"
-                    },
-                    {
-                        "id": 14,
-                        "name": "Nordstan",
-                        "category": "shopping",
-                        "coordinates": {
-                            "latitude": 57.7079,
-                            "longitude": 11.9686
-                        },
-                        "description": "One of Scandinavia's largest shopping centers with over 180 shops, restaurants, and services.",
-                        "hours": "10:00 AM - 8:00 PM",
-                        "admission": "Free",
-                        "website": "https://www.nordstan.se",
-                        "color": "#ffe66d",
-                        "image": "https://jaewoojoung.github.io/tb/png/14.png"
-                    },
-                    {
-                        "id": 15,
-                        "name": "Museum of World Culture",
-                        "category": "museum",
-                        "coordinates": {
-                            "latitude": 57.6978,
-                            "longitude": 11.9812
-                        },
-                        "description": "Contemporary museum exploring global issues through thought-provoking exhibitions and cultural programs.",
-                        "hours": "12:00 PM - 5:00 PM (Wed until 8:00 PM)",
-                        "admission": "Free",
-                        "website": "https://www.varldskulturmuseet.se",
-                        "color": "#4ecdc4",
-                        "image": "https://jaewoojoung.github.io/tb/png/15.png"
-                    },
-                    {
-                        "id": 16,
-                        "name": "Trädgårdsföreningen",
-                        "category": "park",
-                        "coordinates": {
-                            "latitude": 57.7048,
-                            "longitude": 11.9733
-                        },
-                        "description": "Historic 19th-century park with rose garden, palm house, and beautiful landscaped gardens in the city center.",
-                        "hours": "7:00 AM - 8:00 PM",
-                        "admission": "Free (Palm House 20 SEK)",
-                        "website": "https://www.tradgardsforeningen.se",
-                        "color": "#95e1d3",
-                        "image": "https://jaewoojoung.github.io/tb/png/16.png"
-                    },
-                    {
-                        "id": 17,
-                        "name": "Gothenburg City Museum",
-                        "category": "museum",
-                        "coordinates": {
-                            "latitude": 57.7041,
-                            "longitude": 11.9644
-                        },
-                        "description": "Explore Gothenburg's history from Viking times to present in the historic East India Company building.",
-                        "hours": "10:00 AM - 5:00 PM (Wed until 8:00 PM)",
-                        "admission": "60 SEK",
-                        "website": "https://www.stadsmuseum.goteborg.se",
-                        "color": "#4ecdc4",
-                        "image": "https://jaewoojoung.github.io/tb/png/17.png"
-                    },
-                    {
-                        "id": 18,
-                        "name": "Röhsska Museum",
-                        "category": "museum",
-                        "coordinates": {
-                            "latitude": 57.6989,
-                            "longitude": 11.9647
-                        },
-                        "description": "Sweden's only museum of design and applied arts featuring fashion, furniture, and decorative arts.",
-                        "hours": "12:00 PM - 5:00 PM (Thu until 8:00 PM)",
-                        "admission": "60 SEK",
-                        "website": "https://www.rohsska.se",
-                        "color": "#4ecdc4",
-                        "image": "https://jaewoojoung.github.io/tb/png/18.png"
-                    },
-                    {
-                        "id": 19,
-                        "name": "Delsjön Nature Reserve",
-                        "category": "park",
-                        "coordinates": {
-                            "latitude": 57.6871,
-                            "longitude": 12.0439
-                        },
-                        "description": "Popular recreation area with two lakes offering swimming, hiking trails, and outdoor activities year-round.",
-                        "hours": "Open 24/7",
-                        "admission": "Free",
-                        "website": null,
-                        "color": "#95e1d3",
-                        "image": "https://jaewoojoung.github.io/tb/png/19.png"
-                    },
-                    {
-                        "id": 20,
-                        "name": "Aeroseum",
-                        "category": "museum",
-                        "coordinates": {
-                            "latitude": 57.7761,
-                            "longitude": 11.7768
-                        },
-                        "description": "Underground aviation museum in a former military hangar featuring aircraft and flight simulators.",
-                        "hours": "11:00 AM - 6:00 PM (Summer only)",
-                        "admission": "Adults 140 SEK",
-                        "website": "https://www.aeroseum.se",
-                        "color": "#4ecdc4",
-                        "image": "https://jaewoojoung.github.io/tb/png/20.png"
-                    },
-                    {
-                        "id": 21,
-                        "name": "Nya Älvsborg Fortress",
-                        "category": "culture",
-                        "coordinates": {
-                            "latitude": 57.6624,
-                            "longitude": 11.8423
-                        },
-                        "description": "17th-century sea fortress on an island at the harbor entrance, accessible by boat tour with guided visits.",
-                        "hours": "Tours: May-September",
-                        "admission": "Adults 195 SEK (includes boat)",
-                        "website": "https://www.stromma.se",
-                        "color": "#4ecdc4",
-                        "image": "https://jaewoojoung.github.io/tb/png/21.png"
+                    (error) => {
+                        textEl.textContent = 'Location unavailable';
+                        console.error('Error getting location:', error);
                     }
+                );
+            } else {
+                textEl.textContent = 'Geolocation not supported';
+            }
+        }
+
+        // Update distances for all places
+        function updateDistances() {
+            if (!userLocation) return;
+            
+            places.forEach(place => {
+                place.distance = calculateDistance(
+                    userLocation.lat,
+                    userLocation.lng,
+                    place.coordinates.latitude,
+                    place.coordinates.longitude
+                );
+            });
+        }
+
+        // Custom icon
+        const createCustomIcon = (color) => {
+            return L.divIcon({
+                className: 'custom-marker',
+                html: `<div style="background: ${color}; width: 30px; height: 30px; border-radius: 50%; border: 3px solid white; box-shadow: 0 3px 10px rgba(0,0,0,0.3);"></div>`,
+                iconSize: [30, 30],
+                iconAnchor: [15, 15]
+            });
+        };
+
+        // Initialize places on map and cards
+        function initializePlaces() {
+            // Add markers
+            places.forEach(place => {
+                const marker = L.marker([place.coordinates.latitude, place.coordinates.longitude], {
+                    icon: createCustomIcon(place.color)
+                }).addTo(map);
+                
+                marker.bindPopup(`
+                    <div style="color: black; font-size: 16px;">
+                        <strong>${place.name}</strong><br>
+                        <span style="color: #666;">${place.category}</span><br>
+                        <span style="color: #666;">${place.hours}</span><br>
+                        ${place.admission ? `<span style="color: #666;">Admission: ${place.admission}</span>` : ''}
+                    </div>
+                `);
+                
+                marker.category = place.category;
+                markers.push(marker);
+            });
+            
+            // Get user location
+            getUserLocation();
+            
+            // Get weather
+            getWeather();
+            
+            // Render place cards
+            renderPlaceCards();
+        }
+
+        // Get filtered and sorted places
+        function getProcessedPlaces() {
+            let processedPlaces = [...places];
+            
+            // Apply filter
+            if (currentFilter !== 'all') {
+                processedPlaces = processedPlaces.filter(place => place.category === currentFilter);
+            }
+            
+            // Apply sort
+            if (currentSort === 'distance' && userLocation) {
+                processedPlaces.sort((a, b) => parseFloat(a.distance) - parseFloat(b.distance));
+            } else if (currentSort === 'name') {
+                processedPlaces.sort((a, b) => a.name.localeCompare(b.name));
+            }
+            
+            return processedPlaces;
+        }
+
+        // Render place cards
+        function renderPlaceCards() {
+            const grid = document.getElementById('places-grid');
+            grid.innerHTML = '';
+            
+            const processedPlaces = getProcessedPlaces();
+            
+            processedPlaces.forEach((place, index) => {
+                const card = document.createElement('div');
+                card.className = 'place-card';
+                card.style.animationDelay = `${index * 0.1}s`;
+                
+                // Create title with link to detail page
+                const titleHTML = `<h3><a href="place.html?id=${place.id}" style="color: inherit; text-decoration: none;">${place.name}</a></h3>`;
+                
+                card.innerHTML = `
+                    <div class="place-card-bg" style="background-image: url('${place.image}')"></div>
+                    <div class="place-card-content">
+                        ${titleHTML}
+                        <span class="category">${place.category}</span>
+                        ${place.distance ? `<div class="distance">${place.distance} km away</div>` : ''}
+                        <p>${place.description}</p>
+                        <div class="details">
+                            <span class="time">${place.hours}</span>
+                            <button class="visit-btn" onclick="focusPlace(${place.coordinates.latitude}, ${place.coordinates.longitude})">View on Map</button>
+                        </div>
+                    </div>
+                `;
+                
+                // Add mouse move effect
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    card.style.setProperty('--mouse-x', `${x}px`);
+                    card.style.setProperty('--mouse-y', `${y}px`);
+                });
+                
+                grid.appendChild(card);
+            });
+        }
+
+        // Filter places
+        function filterPlaces(category) {
+            currentFilter = category;
+            
+            const buttons = document.querySelectorAll('.filter-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Update markers visibility
+            markers.forEach(marker => {
+                if (category === 'all' || marker.category === category) {
+                    marker.addTo(map);
+                } else {
+                    marker.remove();
+                }
+            });
+            
+            renderPlaceCards();
+        }
+
+        // Sort by distance
+        function sortByDistance() {
+            if (!userLocation) {
+                alert('Please enable location services to sort by distance');
+                return;
+            }
+            
+            currentSort = 'distance';
+            document.getElementById('sort-distance').classList.add('active');
+            document.getElementById('sort-name').classList.remove('active');
+            renderPlaceCards();
+        }
+
+        // Sort by name
+        function sortByName() {
+            currentSort = 'name';
+            document.getElementById('sort-name').classList.add('active');
+            document.getElementById('sort-distance').classList.remove('active');
+            renderPlaceCards();
+        }
+
+        // Focus on specific place
+        function focusPlace(lat, lng) {
+            map.setView([lat, lng], 16);
+            document.getElementById('map-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Smooth scroll
+        document.querySelector('.cta-button').addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('map-section').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        // Add radar animation CSS
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes radar {
+                0% {
+                    opacity: 1;
+                    transform: translate(-50%, -50%) scale(0);
+                }
+                100% {
+                    opacity: 0;
+                    transform: translate(-50%, -50%) scale(1);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Load places when page loads
+        loadPlaces();
+        
+        // Refresh weather every 10 minutes
+        setInterval(getWeather, 600000);
+    </script>
+</body>
+</html>
