@@ -1,0 +1,317 @@
+[
+  {
+    "id": 1,
+    "name": "Liseberg",
+    "category": "entertainment",
+    "coordinates": {
+      "latitude": 57.6949,
+      "longitude": 11.9926
+    },
+    "description": "Scandinavia's largest amusement park with thrilling rides, beautiful gardens, and seasonal events throughout the year.",
+    "hours": "Varies by season",
+    "admission": "From 95 SEK",
+    "website": "https://www.liseberg.se",
+    "color": "#ff6b6b",
+    "image": "https://jaewoojoung.github.io/tb/png/1.png"
+  },
+  {
+    "id": 2,
+    "name": "Universeum",
+    "category": "museum",
+    "coordinates": {
+      "latitude": 57.6947,
+      "longitude": 11.9892
+    },
+    "description": "Nordic region's largest science centre with rainforest, aquarium, and interactive exhibitions for all ages.",
+    "hours": "10:00 AM - 6:00 PM",
+    "admission": "Adults 285 SEK",
+    "website": "https://www.universeum.se",
+    "color": "#4ecdc4",
+    "image": "https://jaewoojoung.github.io/tb/png/2.png"
+  },
+  {
+    "id": 3,
+    "name": "Haga",
+    "category": "shopping",
+    "coordinates": {
+      "latitude": 57.6980,
+      "longitude": 11.9539
+    },
+    "description": "Charming historic district with cobblestone streets, wooden houses, cozy cafés, and unique boutiques.",
+    "hours": "Shops: 10:00 AM - 6:00 PM",
+    "admission": "Free",
+    "website": null,
+    "color": "#ffe66d",
+    "image": "https://jaewoojoung.github.io/tb/png/3.png"
+  },
+  {
+    "id": 4,
+    "name": "Gothenburg Museum of Art",
+    "category": "museum",
+    "coordinates": {
+      "latitude": 57.6984,
+      "longitude": 11.9819
+    },
+    "description": "Leading Nordic art museum featuring works from the 15th century to contemporary pieces.",
+    "hours": "11:00 AM - 5:00 PM (Thu until 8:00 PM)",
+    "admission": "120 SEK",
+    "website": "https://www.goteborgskonstmuseum.se",
+    "color": "#4ecdc4",
+    "image": "https://jaewoojoung.github.io/tb/png/4.png"
+  },
+  {
+    "id": 5,
+    "name": "Southern Gothenburg Archipelago",
+    "category": "park",
+    "coordinates": {
+      "latitude": 57.6418,
+      "longitude": 11.7671
+    },
+    "description": "Car-free islands accessible by ferry, offering pristine nature, swimming spots, and traditional fishing villages.",
+    "hours": "Ferry schedules vary",
+    "admission": "Ferry ticket required",
+    "website": "https://www.vasttrafik.se",
+    "color": "#95e1d3",
+    "image": "https://jaewoojoung.github.io/tb/png/5.png"
+  },
+  {
+    "id": 6,
+    "name": "Slottsskogen",
+    "category": "park",
+    "coordinates": {
+      "latitude": 57.6863,
+      "longitude": 11.9478
+    },
+    "description": "Large park with zoo, playgrounds, and walking trails. Home to Nordic animals including seals, elks, and penguins.",
+    "hours": "Open 24/7",
+    "admission": "Free",
+    "website": "https://goteborg.se/slottsskogen",
+    "color": "#95e1d3",
+    "image": "https://jaewoojoung.github.io/tb/png/6.png"
+  },
+  {
+    "id": 7,
+    "name": "Feskekôrka (Fish Church)",
+    "category": "shopping",
+    "coordinates": {
+      "latitude": 57.7038,
+      "longitude": 11.9580
+    },
+    "description": "Iconic fish market in a building resembling a Gothic church, offering fresh seafood and a restaurant.",
+    "hours": "10:00 AM - 6:00 PM (Closed Sun-Mon)",
+    "admission": "Free",
+    "website": "https://www.feskekorka.se",
+    "color": "#ffe66d",
+    "image": "https://jaewoojoung.github.io/tb/png/7.png"
+  },
+  {
+    "id": 8,
+    "name": "Gothenburg Botanical Garden",
+    "category": "park",
+    "coordinates": {
+      "latitude": 57.6828,
+      "longitude": 11.9506
+    },
+    "description": "One of Europe's largest botanical gardens with 16,000 species including rare orchids and a Japanese garden.",
+    "hours": "9:00 AM - Sunset",
+    "admission": "Free (Greenhouse 20 SEK)",
+    "website": "https://www.botaniska.se",
+    "color": "#95e1d3",
+    "image": "https://jaewoojoung.github.io/tb/png/8.png"
+  },
+  {
+    "id": 9,
+    "name": "Gothenburg Opera House",
+    "category": "culture",
+    "coordinates": {
+      "latitude": 57.7066,
+      "longitude": 11.9640
+    },
+    "description": "Stunning waterfront opera house offering world-class performances of opera, musicals, ballet, and concerts.",
+    "hours": "Box office: 10:00 AM - 6:00 PM",
+    "admission": "Varies by performance",
+    "website": "https://www.opera.se",
+    "color": "#4ecdc4",
+    "image": "https://jaewoojoung.github.io/tb/png/9.png"
+  },
+  {
+    "id": 10,
+    "name": "Avenyn (Kungsportsavenyen)",
+    "category": "shopping",
+    "coordinates": {
+      "latitude": 57.6999,
+      "longitude": 11.9733
+    },
+    "description": "The main boulevard of Gothenburg lined with shops, restaurants, cafés, and cultural institutions.",
+    "hours": "Open 24/7",
+    "admission": "Free",
+    "website": null,
+    "color": "#ffe66d",
+    "image": "https://jaewoojoung.github.io/tb/png/10.png"
+  },
+  {
+    "id": 11,
+    "name": "Maritiman",
+    "category": "museum",
+    "coordinates": {
+      "latitude": 57.7118,
+      "longitude": 11.9627
+    },
+    "description": "The world's largest floating ship museum with 15 historic vessels including a submarine and destroyer.",
+    "hours": "10:00 AM - 5:00 PM",
+    "admission": "Adults 175 SEK",
+    "website": "https://www.maritiman.se",
+    "color": "#4ecdc4",
+    "image": "https://jaewoojoung.github.io/tb/png/11.png"
+  },
+  {
+    "id": 12,
+    "name": "Volvo Museum",
+    "category": "museum",
+    "coordinates": {
+      "latitude": 57.6971,
+      "longitude": 11.8234
+    },
+    "description": "Showcasing Volvo's history from 1927 to present with cars, trucks, buses, and marine engines.",
+    "hours": "10:00 AM - 5:00 PM (Closed Mon)",
+    "admission": "100 SEK",
+    "website": "https://www.volvomuseum.se",
+    "color": "#4ecdc4",
+    "image": "https://jaewoojoung.github.io/tb/png/12.png"
+  },
+  {
+    "id": 13,
+    "name": "Skansen Kronan",
+    "category": "culture",
+    "coordinates": {
+      "latitude": 57.6951,
+      "longitude": 11.9536
+    },
+    "description": "17th-century fortress offering panoramic views of Gothenburg from its hilltop location in Haga.",
+    "hours": "11:00 AM - 4:00 PM",
+    "admission": "40 SEK",
+    "website": "https://www.skansenkronan.se",
+    "color": "#4ecdc4",
+    "image": "https://jaewoojoung.github.io/tb/png/13.png"
+  },
+  {
+    "id": 14,
+    "name": "Nordstan",
+    "category": "shopping",
+    "coordinates": {
+      "latitude": 57.7079,
+      "longitude": 11.9686
+    },
+    "description": "One of Scandinavia's largest shopping centers with over 180 shops, restaurants, and services.",
+    "hours": "10:00 AM - 8:00 PM",
+    "admission": "Free",
+    "website": "https://www.nordstan.se",
+    "color": "#ffe66d",
+    "image": "https://jaewoojoung.github.io/tb/png/14.png"
+  },
+  {
+    "id": 15,
+    "name": "Museum of World Culture",
+    "category": "museum",
+    "coordinates": {
+      "latitude": 57.6978,
+      "longitude": 11.9812
+    },
+    "description": "Contemporary museum exploring global issues through thought-provoking exhibitions and cultural programs.",
+    "hours": "12:00 PM - 5:00 PM (Wed until 8:00 PM)",
+    "admission": "Free",
+    "website": "https://www.varldskulturmuseet.se",
+    "color": "#4ecdc4",
+    "image": "https://jaewoojoung.github.io/tb/png/15.png"
+  },
+  {
+    "id": 16,
+    "name": "Trädgårdsföreningen",
+    "category": "park",
+    "coordinates": {
+      "latitude": 57.7048,
+      "longitude": 11.9733
+    },
+    "description": "Historic 19th-century park with rose garden, palm house, and beautiful landscaped gardens in the city center.",
+    "hours": "7:00 AM - 8:00 PM",
+    "admission": "Free (Palm House 20 SEK)",
+    "website": "https://www.tradgardsforeningen.se",
+    "color": "#95e1d3",
+    "image": "https://jaewoojoung.github.io/tb/png/16.png"
+  },
+  {
+    "id": 17,
+    "name": "Gothenburg City Museum",
+    "category": "museum",
+    "coordinates": {
+      "latitude": 57.7041,
+      "longitude": 11.9644
+    },
+    "description": "Explore Gothenburg's history from Viking times to present in the historic East India Company building.",
+    "hours": "10:00 AM - 5:00 PM (Wed until 8:00 PM)",
+    "admission": "60 SEK",
+    "website": "https://www.stadsmuseum.goteborg.se",
+    "color": "#4ecdc4",
+    "image": "https://jaewoojoung.github.io/tb/png/17.png"
+  },
+  {
+    "id": 18,
+    "name": "Röhsska Museum",
+    "category": "museum",
+    "coordinates": {
+      "latitude": 57.6989,
+      "longitude": 11.9647
+    },
+    "description": "Sweden's only museum of design and applied arts featuring fashion, furniture, and decorative arts.",
+    "hours": "12:00 PM - 5:00 PM (Thu until 8:00 PM)",
+    "admission": "60 SEK",
+    "website": "https://www.rohsska.se",
+    "color": "#4ecdc4",
+    "image": "https://jaewoojoung.github.io/tb/png/18.png"
+  },
+  {
+    "id": 19,
+    "name": "Delsjön Nature Reserve",
+    "category": "park",
+    "coordinates": {
+      "latitude": 57.6871,
+      "longitude": 12.0439
+    },
+    "description": "Popular recreation area with two lakes offering swimming, hiking trails, and outdoor activities year-round.",
+    "hours": "Open 24/7",
+    "admission": "Free",
+    "website": null,
+    "color": "#95e1d3",
+    "image": "https://jaewoojoung.github.io/tb/png/19.png"
+  },
+  {
+    "id": 20,
+    "name": "Aeroseum",
+    "category": "museum",
+    "coordinates": {
+      "latitude": 57.7761,
+      "longitude": 11.7768
+    },
+    "description": "Underground aviation museum in a former military hangar featuring aircraft and flight simulators.",
+    "hours": "11:00 AM - 6:00 PM (Summer only)",
+    "admission": "Adults 140 SEK",
+    "website": "https://www.aeroseum.se",
+    "color": "#4ecdc4",
+    "image": "https://jaewoojoung.github.io/tb/png/20.png"
+  },
+  {
+    "id": 21,
+    "name": "Nya Älvsborg Fortress",
+    "category": "culture",
+    "coordinates": {
+      "latitude": 57.6624,
+      "longitude": 11.8423
+    },
+    "description": "17th-century sea fortress on an island at the harbor entrance, accessible by boat tour with guided visits.",
+    "hours": "Tours: May-September",
+    "admission": "Adults 195 SEK (includes boat)",
+    "website": "https://www.stromma.se",
+    "color": "#4ecdc4",
+    "image": "https://jaewoojoung.github.io/tb/png/21.png"
+  }
+]
