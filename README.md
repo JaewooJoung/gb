@@ -1,2 +1,2 @@
-# gb
-Göteborg in Sweden , places to remember
+# Göteborg in Sweden , places to remember
+Göteborg, Sweden travel guide. 
