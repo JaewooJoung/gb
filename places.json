@@ -1,3 +1,6 @@
+https://jaewoojoung.github.io/gb
+
+
 [
   {
     "id": 1,
@@ -12,7 +15,7 @@
     "admission": "From 95 SEK",
     "website": "https://www.liseberg.se",
     "color": "#ff6b6b",
-    "image": "https://jaewoojoung.github.io/tb/png/1.png"
+    "image": "/gb/png/1.png"
   },
   {
     "id": 2,
@@ -27,7 +30,7 @@
     "admission": "Adults 285 SEK",
     "website": "https://www.universeum.se",
     "color": "#4ecdc4",
-    "image": "https://jaewoojoung.github.io/tb/png/2.png"
+    "image": "/gb/png/2.png"
   },
   {
     "id": 3,
@@ -40,9 +43,9 @@
     "description": "Charming historic district with cobblestone streets, wooden houses, cozy cafés, and unique boutiques.",
     "hours": "Shops: 10:00 AM - 6:00 PM",
     "admission": "Free",
-    "website": null,
+    "website": "https://www.hagagoteborg.se/",
     "color": "#ffe66d",
-    "image": "https://jaewoojoung.github.io/tb/png/3.png"
+    "image": "/gb/png/3.png"
   },
   {
     "id": 4,
@@ -57,7 +60,7 @@
     "admission": "120 SEK",
     "website": "https://www.goteborgskonstmuseum.se",
     "color": "#4ecdc4",
-    "image": "https://jaewoojoung.github.io/tb/png/4.png"
+    "image": "/gb/png/4.png"
   },
   {
     "id": 5,
@@ -72,7 +75,7 @@
     "admission": "Ferry ticket required",
     "website": "https://www.vasttrafik.se",
     "color": "#95e1d3",
-    "image": "https://jaewoojoung.github.io/tb/png/5.png"
+    "image": "/gb/png/5.png"
   },
   {
     "id": 6,
@@ -87,7 +90,7 @@
     "admission": "Free",
     "website": "https://goteborg.se/slottsskogen",
     "color": "#95e1d3",
-    "image": "https://jaewoojoung.github.io/tb/png/6.png"
+    "image": "/gb/png/6.png"
   },
   {
     "id": 7,
@@ -102,7 +105,7 @@
     "admission": "Free",
     "website": "https://www.feskekorka.se",
     "color": "#ffe66d",
-    "image": "https://jaewoojoung.github.io/tb/png/7.png"
+    "image": "/gb/png/7.png"
   },
   {
     "id": 8,
@@ -117,7 +120,7 @@
     "admission": "Free (Greenhouse 20 SEK)",
     "website": "https://www.botaniska.se",
     "color": "#95e1d3",
-    "image": "https://jaewoojoung.github.io/tb/png/8.png"
+    "image": "/gb/png/8.png"
   },
   {
     "id": 9,
@@ -132,7 +135,7 @@
     "admission": "Varies by performance",
     "website": "https://www.opera.se",
     "color": "#4ecdc4",
-    "image": "https://jaewoojoung.github.io/tb/png/9.png"
+    "image": "/gb/png/9.png"
   },
   {
     "id": 10,
@@ -145,9 +148,9 @@
     "description": "The main boulevard of Gothenburg lined with shops, restaurants, cafés, and cultural institutions.",
     "hours": "Open 24/7",
     "admission": "Free",
-    "website": null,
+    "website": "https://www.avenyn.se",
     "color": "#ffe66d",
-    "image": "https://jaewoojoung.github.io/tb/png/10.png"
+    "image": "/gb/png/10.png"
   },
   {
     "id": 11,
@@ -162,7 +165,7 @@
     "admission": "Adults 175 SEK",
     "website": "https://www.maritiman.se",
     "color": "#4ecdc4",
-    "image": "https://jaewoojoung.github.io/tb/png/11.png"
+    "image": "/gb/png/11.png"
   },
   {
     "id": 12,
@@ -177,7 +180,7 @@
     "admission": "100 SEK",
     "website": "https://www.volvomuseum.se",
     "color": "#4ecdc4",
-    "image": "https://jaewoojoung.github.io/tb/png/12.png"
+    "image": "/gb/png/12.png"
   },
   {
     "id": 13,
@@ -192,7 +195,7 @@
     "admission": "40 SEK",
     "website": "https://www.skansenkronan.se",
     "color": "#4ecdc4",
-    "image": "https://jaewoojoung.github.io/tb/png/13.png"
+    "image": "/gb/png/13.png"
   },
   {
     "id": 14,
@@ -207,7 +210,7 @@
     "admission": "Free",
     "website": "https://www.nordstan.se",
     "color": "#ffe66d",
-    "image": "https://jaewoojoung.github.io/tb/png/14.png"
+    "image": "/gb/png/14.png"
   },
   {
     "id": 15,
@@ -222,7 +225,7 @@
     "admission": "Free",
     "website": "https://www.varldskulturmuseet.se",
     "color": "#4ecdc4",
-    "image": "https://jaewoojoung.github.io/tb/png/15.png"
+    "image": "/gb/png/15.png"
   },
   {
     "id": 16,
@@ -237,7 +240,7 @@
     "admission": "Free (Palm House 20 SEK)",
     "website": "https://www.tradgardsforeningen.se",
     "color": "#95e1d3",
-    "image": "https://jaewoojoung.github.io/tb/png/16.png"
+    "image": "/gb/png/16.png"
   },
   {
     "id": 17,
@@ -252,7 +255,7 @@
     "admission": "60 SEK",
     "website": "https://www.stadsmuseum.goteborg.se",
     "color": "#4ecdc4",
-    "image": "https://jaewoojoung.github.io/tb/png/17.png"
+    "image": "/gb/png/17.png"
   },
   {
     "id": 18,
@@ -267,7 +270,7 @@
     "admission": "60 SEK",
     "website": "https://www.rohsska.se",
     "color": "#4ecdc4",
-    "image": "https://jaewoojoung.github.io/tb/png/18.png"
+    "image": "/gb/png/18.png"
   },
   {
     "id": 19,
@@ -280,9 +283,9 @@
     "description": "Popular recreation area with two lakes offering swimming, hiking trails, and outdoor activities year-round.",
     "hours": "Open 24/7",
     "admission": "Free",
-    "website": null,
+    "website": "https://www.lansstyrelsen.se/vastra-gotaland/besoksmal/naturreservat/delsjoomradet.html?sv.target=12.382c024b1800285d5863a8b2&sv.12.382c024b1800285d5863a8b2.route=/&searchString=&counties=&municipalities=&reserveTypes=&natureTypes=&accessibility=&facilities=&sort=none",
     "color": "#95e1d3",
-    "image": "https://jaewoojoung.github.io/tb/png/19.png"
+    "image": "/gb/png/19.png"
   },
   {
     "id": 20,
@@ -297,7 +300,7 @@
     "admission": "Adults 140 SEK",
     "website": "https://www.aeroseum.se",
     "color": "#4ecdc4",
-    "image": "https://jaewoojoung.github.io/tb/png/20.png"
+    "image": "/gb/png/20.png"
   },
   {
     "id": 21,
@@ -312,6 +315,21 @@
     "admission": "Adults 195 SEK (includes boat)",
     "website": "https://www.stromma.se",
     "color": "#4ecdc4",
-    "image": "https://jaewoojoung.github.io/tb/png/21.png"
+    "image": "/gb/png/21.png"
+  },
+  {
+    "id": 22,
+    "name": "ONGO",
+    "category": "shopping",
+    "coordinates": {
+      "latitude": 57.65069,
+      "longitude": 11.94885
+    },
+    "description": "Dollar store in Gothenburg",
+    "hours": "10:00 AM - 8:00 PM",
+    "admission": "Free",
+    "website": "https://www.ongo.se/",
+    "color": "#ffe66d",
+    "image": "/gb/png/22.png"
   }
 ]
